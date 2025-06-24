@@ -1,4 +1,4 @@
-package dev.dulipsameera.patientservice.util;
+package dev.dulipsameera.patientservice.util.mapper;
 
 import dev.dulipsameera.patientservice.dto.PatientResponseDTO;
 import dev.dulipsameera.patientservice.model.Patient;
