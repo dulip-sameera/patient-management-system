@@ -2,6 +2,7 @@ package dev.dulipsameera.patientservice.service.impl;
 
 import dev.dulipsameera.patientservice.dto.PatientRequestDTO;
 import dev.dulipsameera.patientservice.dto.PatientResponseDTO;
+import dev.dulipsameera.patientservice.exception.custom.EmailAlreadyExistsException;
 import dev.dulipsameera.patientservice.model.Patient;
 import dev.dulipsameera.patientservice.repository.PatientRepository;
 import dev.dulipsameera.patientservice.service.PatientService;
@@ -28,6 +29,10 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public PatientResponseDTO createPatient(PatientRequestDTO patientRequestDTO) {
+        if (patientRepository.existsByEmail(patientRequestDTO.getEmail())) {
+            throw new EmailAlreadyExistsException("Patient from this email already exists " + patientRequestDTO.getEmail());
+        }
+
         Patient patient = patientRepository.save(PatientMapper.toPatient(patientRequestDTO));
         return PatientMapper.toPatientResponseDTO(patient);
     }
