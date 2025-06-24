@@ -1,5 +1,6 @@
 package dev.dulipsameera.patientservice.service.impl;
 
+import dev.dulipsameera.patientservice.dto.PatientRequestDTO;
 import dev.dulipsameera.patientservice.dto.PatientResponseDTO;
 import dev.dulipsameera.patientservice.model.Patient;
 import dev.dulipsameera.patientservice.repository.PatientRepository;
@@ -23,5 +24,11 @@ public class PatientServiceImpl implements PatientService {
     public List<PatientResponseDTO> getAllPatients() {
         List<Patient> patients = patientRepository.findAll();
         return patients.stream().map(PatientMapper::toPatientResponseDTO).toList();
+    }
+
+    @Override
+    public PatientResponseDTO createPatient(PatientRequestDTO patientRequestDTO) {
+        Patient patient = patientRepository.save(PatientMapper.toPatient(patientRequestDTO));
+        return PatientMapper.toPatientResponseDTO(patient);
     }
 }
