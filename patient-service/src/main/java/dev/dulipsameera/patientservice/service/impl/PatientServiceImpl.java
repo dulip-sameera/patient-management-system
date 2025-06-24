@@ -4,6 +4,7 @@ import dev.dulipsameera.patientservice.dto.PatientRequestDTO;
 import dev.dulipsameera.patientservice.dto.PatientResponseDTO;
 import dev.dulipsameera.patientservice.exception.custom.EmailAlreadyExistsException;
 import dev.dulipsameera.patientservice.exception.custom.PatientNotFoundException;
+import dev.dulipsameera.patientservice.grpc.BillingServiceGrpcClient;
 import dev.dulipsameera.patientservice.model.Patient;
 import dev.dulipsameera.patientservice.repository.PatientRepository;
 import dev.dulipsameera.patientservice.service.PatientService;
@@ -18,9 +19,11 @@ import java.util.UUID;
 public class PatientServiceImpl implements PatientService {
 
     private final PatientRepository patientRepository;
+    private final BillingServiceGrpcClient billingServiceGrpcClient;
 
-    public PatientServiceImpl(PatientRepository patientRepository) {
+    public PatientServiceImpl(PatientRepository patientRepository, BillingServiceGrpcClient  billingServiceGrpcClient) {
         this.patientRepository = patientRepository;
+        this.billingServiceGrpcClient = billingServiceGrpcClient;
     }
 
 
@@ -34,6 +37,8 @@ public class PatientServiceImpl implements PatientService {
     public PatientResponseDTO createPatient(PatientRequestDTO patientRequestDTO) {
         handleIfPatientExistsByEmail(patientRequestDTO.getEmail());
         Patient patient = patientRepository.save(PatientMapper.toPatient(patientRequestDTO));
+        billingServiceGrpcClient.createBillingAccount(patient.getId().toString(),
+                patient.getName(), patient.getEmail());
         return PatientMapper.toPatientResponseDTO(patient);
     }
 
