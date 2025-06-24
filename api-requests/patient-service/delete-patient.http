@@ -1,0 +1,4 @@
+### DELETE request to delete a patient
+DELETE http://localhost:4000/patients/818c8dd0-b5eb-4541-a15a-42f5da64fba5
+
+###
