@@ -1,6 +1,8 @@
 package dev.dulipsameera.patientservice.exception;
 
 import dev.dulipsameera.patientservice.exception.custom.EmailAlreadyExistsException;
+import dev.dulipsameera.patientservice.exception.custom.PatientNotFoundException;
+import jdk.jfr.Experimental;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,14 @@ public class GlobalExceptionHandler {
         Map<String, String> errors = new HashMap<>();
         log.warn("Email Already Exists : {}", ex.getMessage());
         errors.put("email", "Email already exists");
+        return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler(PatientNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handlePatientNotFoundException(PatientNotFoundException ex) {
+        Map<String, String> errors = new HashMap<>();
+        log.warn("Patient Not Found : {}", ex.getMessage());
+        errors.put("patient", "Patient Not Found");
         return ResponseEntity.badRequest().body(errors);
     }
 }
