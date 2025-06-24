@@ -1,17 +1,28 @@
 package dev.dulipsameera.patientservice.service.impl;
 
+import dev.dulipsameera.patientservice.dto.PatientResponseDTO;
+import dev.dulipsameera.patientservice.model.Patient;
 import dev.dulipsameera.patientservice.repository.PatientRepository;
 import dev.dulipsameera.patientservice.service.PatientService;
+import dev.dulipsameera.patientservice.util.PatientMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PatientServiceImpl implements PatientService {
 
-    private PatientRepository patientRepository;
+    private final PatientRepository patientRepository;
 
     public PatientServiceImpl(PatientRepository patientRepository) {
         this.patientRepository = patientRepository;
     }
 
 
+    @Override
+    public List<PatientResponseDTO> getAllPatients() {
+        List<Patient> patients = patientRepository.findAll();
+        return patients.stream().map(PatientMapper::mapToPatientResponseDTO).collect(Collectors.toList());
+    }
 }
