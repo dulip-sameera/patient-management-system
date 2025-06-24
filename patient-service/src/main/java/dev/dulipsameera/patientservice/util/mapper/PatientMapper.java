@@ -5,7 +5,7 @@ import dev.dulipsameera.patientservice.model.Patient;
 
 public class PatientMapper {
 
-    public static PatientResponseDTO mapToPatientResponseDTO(Patient patient) {
+    public static PatientResponseDTO toPatientResponseDTO(Patient patient) {
         PatientResponseDTO patientResponseDTO = new PatientResponseDTO();
         patientResponseDTO.setId(String.valueOf(patient.getId()));
         patientResponseDTO.setName(patient.getName());

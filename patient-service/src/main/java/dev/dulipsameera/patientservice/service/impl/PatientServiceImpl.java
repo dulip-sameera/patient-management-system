@@ -8,7 +8,6 @@ import dev.dulipsameera.patientservice.util.mapper.PatientMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PatientServiceImpl implements PatientService {
@@ -23,6 +22,6 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public List<PatientResponseDTO> getAllPatients() {
         List<Patient> patients = patientRepository.findAll();
-        return patients.stream().map(PatientMapper::mapToPatientResponseDTO).collect(Collectors.toList());
+        return patients.stream().map(PatientMapper::toPatientResponseDTO).toList();
     }
 }
