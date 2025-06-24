@@ -1,11 +1,10 @@
 package dev.dulipsameera.patientservice.controller;
 
+import dev.dulipsameera.patientservice.dto.PatientRequestDTO;
 import dev.dulipsameera.patientservice.dto.PatientResponseDTO;
 import dev.dulipsameera.patientservice.service.PatientService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,5 +22,11 @@ public class PatientController {
     public ResponseEntity<List<PatientResponseDTO>> getAllPatients() {
         List<PatientResponseDTO> patientResponseDTOs = patientService.getAllPatients();
         return ResponseEntity.ok().body(patientResponseDTOs);
+    }
+
+    @PostMapping
+    public ResponseEntity<PatientResponseDTO> createPatient(@RequestBody PatientRequestDTO patientRequestDTO) {
+        PatientResponseDTO patientResponseDTO = patientService.createPatient(patientRequestDTO);
+        return ResponseEntity.ok().body(patientResponseDTO);
     }
 }
