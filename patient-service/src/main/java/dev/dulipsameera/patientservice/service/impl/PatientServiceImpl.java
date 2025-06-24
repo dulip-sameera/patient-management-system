@@ -49,6 +49,11 @@ public class PatientServiceImpl implements PatientService {
         return PatientMapper.toPatientResponseDTO(patientRepository.save(patient));
     }
 
+    @Override
+    public void deletePatient(UUID id) {
+        patientRepository.deleteById(id);
+    }
+
     private void handleIfPatientExistsByEmail(String email) {
         if (patientRepository.existsByEmail(email)) {
             throw new EmailAlreadyExistsException("Patient from this email already exists " + email);
