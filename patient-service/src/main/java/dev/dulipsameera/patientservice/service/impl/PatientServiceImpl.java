@@ -5,6 +5,7 @@ import dev.dulipsameera.patientservice.dto.PatientResponseDTO;
 import dev.dulipsameera.patientservice.exception.custom.EmailAlreadyExistsException;
 import dev.dulipsameera.patientservice.exception.custom.PatientNotFoundException;
 import dev.dulipsameera.patientservice.grpc.BillingServiceGrpcClient;
+import dev.dulipsameera.patientservice.kafka.KafkaProducer;
 import dev.dulipsameera.patientservice.model.Patient;
 import dev.dulipsameera.patientservice.repository.PatientRepository;
 import dev.dulipsameera.patientservice.service.PatientService;
@@ -20,10 +21,12 @@ public class PatientServiceImpl implements PatientService {
 
     private final PatientRepository patientRepository;
     private final BillingServiceGrpcClient billingServiceGrpcClient;
+    private final KafkaProducer kafkaProducer;
 
-    public PatientServiceImpl(PatientRepository patientRepository, BillingServiceGrpcClient  billingServiceGrpcClient) {
+    public PatientServiceImpl(PatientRepository patientRepository, BillingServiceGrpcClient  billingServiceGrpcClient, KafkaProducer kafkaProducer) {
         this.patientRepository = patientRepository;
         this.billingServiceGrpcClient = billingServiceGrpcClient;
+        this.kafkaProducer = kafkaProducer;
     }
 
 
@@ -39,6 +42,7 @@ public class PatientServiceImpl implements PatientService {
         Patient patient = patientRepository.save(PatientMapper.toPatient(patientRequestDTO));
         billingServiceGrpcClient.createBillingAccount(patient.getId().toString(),
                 patient.getName(), patient.getEmail());
+        kafkaProducer.sendEvent(patient);
         return PatientMapper.toPatientResponseDTO(patient);
     }
 
